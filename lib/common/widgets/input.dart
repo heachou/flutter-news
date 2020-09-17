@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../utils/screen.dart';
-import '../utils/screen.dart';
 import '../values/colors.dart';
 import '../values/values.dart';
 

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_news/common/apis/apis.dart';
+import 'package:flutter_news/common/entitys/entitys.dart';
 import 'package:flutter_news/common/widgets/button.dart';
 import 'package:flutter_news/common/widgets/input.dart';
 import 'package:flutter_news/common/widgets/widgets.dart';
@@ -19,6 +21,31 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _emailController = TextEditingController();
   //密码的控制器
   final TextEditingController _passController = TextEditingController();
+  // 跳转 注册界面
+  _handleNavSignUp() {
+    Navigator.pushNamed(context, "/sign-up");
+  }
+
+  // 执行登录操作
+  _handleSignIn() async {
+    String _emailText = _emailController.value.text;
+    String _passText = _passController.value.text;
+    if (!duIsEmail(_emailText)) {
+      toastInfo(msg: '请正确输入邮件');
+      return;
+    }
+    if (!duCheckStringLength(_passText, 6)) {
+      toastInfo(msg: '密码不能小于6位');
+      return;
+    }
+
+    UserRequestEntity params =
+        UserRequestEntity(email: _emailText, password: duSHA256(_passText));
+    UserResponseEntity res = await UserAPI.login(params: params);
+    print(res.accessToken);
+    print(res.displayName);
+  }
+
   // logo
   Widget _buildLogo() {
     return Container(
@@ -112,26 +139,12 @@ class _SignInPageState extends State<SignInPage> {
             child: Row(
               children: [
                 btnFlatButtonWidget(
-                    onPressed: () {
-                      Navigator.pushNamed(
-                        context,
-                        "/sign-up",
-                      );
-                    },
+                    onPressed: _handleNavSignUp,
                     gbColor: AppColors.thirdElement,
                     title: "Sign up"),
                 Spacer(),
                 btnFlatButtonWidget(
-                  onPressed: () {
-                    if (!duIsEmail(_emailController.value.text)) {
-                      toastInfo(msg: '请正确输入邮件');
-                      return;
-                    }
-                    if (!duCheckStringLength(_passController.value.text, 6)) {
-                      toastInfo(msg: '密码不能小于6位');
-                      return;
-                    }
-                  },
+                  onPressed: () => _handleSignIn(),
                   gbColor: AppColors.primaryElement,
                   title: "Sign in",
                 ),
