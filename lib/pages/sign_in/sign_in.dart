@@ -31,7 +31,7 @@ class _SignInPageState extends State<SignInPage> {
     String _emailText = _emailController.value.text;
     String _passText = _passController.value.text;
     if (!duIsEmail(_emailText)) {
-      toastInfo(msg: '请正确输入邮件');
+      toastInfo(msg: '请正确输入邮箱');
       return;
     }
     if (!duCheckStringLength(_passText, 6)) {
