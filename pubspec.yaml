@@ -81,6 +81,9 @@ flutter:
       fonts:
         - asset: assets/fonts/Montserrat-SemiBold.ttf
           weight: 600
+    - family: Iconfont
+      fonts:
+        - asset: assets/fonts/iconfont.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
