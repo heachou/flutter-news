@@ -8,7 +8,7 @@ import 'package:flutter_news/common/values/values.dart';
 
 class Global {
   /// 用户配置
-  static UserResponseEntity profile = UserResponseEntity(
+  static UserLoginResponseEntity profile = UserLoginResponseEntity(
     accessToken: null,
   );
 
@@ -27,7 +27,7 @@ class Global {
     // 读取离线用户信息
     var _profileJSON = StorageUtil().getJSON(STORAGE_USER_PROFILE_KEY);
     if (_profileJSON != null) {
-      profile = UserResponseEntity.fromJson(_profileJSON);
+      profile = UserLoginResponseEntity.fromJson(_profileJSON);
     }
 
     // http 缓存
@@ -38,5 +38,10 @@ class Global {
           SystemUiOverlayStyle(statusBarColor: Colors.transparent);
       SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
     }
+  }
+
+  static Future<bool> saveProfile(UserLoginResponseEntity userResponse) {
+    return StorageUtil()
+        .setJSON(STORAGE_USER_PROFILE_KEY, userResponse.toJson());
   }
 }

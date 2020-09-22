@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
-class UserRequestEntity {
-  UserRequestEntity({
+class UserLoginRequestEntity {
+  UserLoginRequestEntity({
     @required this.email,
     @required this.password,
   });
@@ -11,8 +11,8 @@ class UserRequestEntity {
   String email;
   String password;
 
-  factory UserRequestEntity.fromJson(Map<String, dynamic> json) =>
-      UserRequestEntity(
+  factory UserLoginRequestEntity.fromJson(Map<String, dynamic> json) =>
+      UserLoginRequestEntity(
         email: json["email"],
         password: json["password"],
       );
@@ -23,8 +23,8 @@ class UserRequestEntity {
       };
 }
 
-class UserResponseEntity {
-  UserResponseEntity({
+class UserLoginResponseEntity {
+  UserLoginResponseEntity({
     @required this.accessToken,
     this.channels,
     this.displayName,
@@ -34,13 +34,13 @@ class UserResponseEntity {
   List<Channel> channels;
   String displayName;
 
-  factory UserResponseEntity.fromRawJson(String str) =>
-      UserResponseEntity.fromJson(json.decode(str));
+  factory UserLoginResponseEntity.fromRawJson(String str) =>
+      UserLoginResponseEntity.fromJson(json.decode(str));
 
   String toRawJson() => json.encode(toJson());
 
-  factory UserResponseEntity.fromJson(Map<String, dynamic> json) =>
-      UserResponseEntity(
+  factory UserLoginResponseEntity.fromJson(Map<String, dynamic> json) =>
+      UserLoginResponseEntity(
         accessToken: json["access_token"],
         channels: List<Channel>.from(
             json["channels"].map((x) => channelValues.map[x])),
