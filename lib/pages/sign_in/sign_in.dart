@@ -8,6 +8,7 @@ import 'package:flutter_news/common/utils/screen.dart';
 import 'package:flutter_news/common/utils/utils.dart';
 import 'package:flutter_news/common/values/colors.dart';
 import 'package:flutter_news/common/values/values.dart';
+import 'package:flutter_news/global.dart';
 
 class SignInPage extends StatefulWidget {
   SignInPage({Key key}) : super(key: key);
@@ -42,8 +43,11 @@ class _SignInPageState extends State<SignInPage> {
     UserRequestEntity params =
         UserRequestEntity(email: _emailText, password: duSHA256(_passText));
     UserResponseEntity res = await UserAPI.login(params: params);
-    print(res.accessToken);
-    print(res.displayName);
+    // Global.save
+    Navigator.pushNamed(
+      context,
+      '/app',
+    );
   }
 
   // logo
