@@ -42,7 +42,8 @@ class _SignInPageState extends State<SignInPage> {
 
     UserLoginRequestEntity params = UserLoginRequestEntity(
         email: _emailText, password: duSHA256(_passText));
-    UserLoginResponseEntity res = await UserAPI.login(params: params);
+    UserLoginResponseEntity res =
+        await UserAPI.login(params: params, context: context);
     Global.saveProfile(res);
     Navigator.pushNamed(
       context,

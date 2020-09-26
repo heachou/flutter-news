@@ -11,6 +11,12 @@ class NewsPageListRequestEntity {
     this.tag,
     this.keyword,
   });
+  Map<String, dynamic> toJson() => {
+        "categoryCode": categoryCode,
+        "channelCode": channelCode,
+        "tag": tag,
+        "keyword": keyword,
+      };
 }
 
 // To parse this JSON data, do
@@ -149,4 +155,10 @@ class NewsRecommendRequestEntity {
     this.tag,
     this.keyword,
   });
+  Map<String, dynamic> toJson() => {
+        "categoryCode": categoryCode,
+        "channelCode": channelCode,
+        "tag": tag,
+        "keyword": keyword,
+      };
 }
