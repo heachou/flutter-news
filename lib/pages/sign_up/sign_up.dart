@@ -187,6 +187,10 @@ class _SignUpPageState extends State<SignUpPage> {
       resizeToAvoidBottomInset: false,
       appBar: transparentAppBar(
         context: context,
+        // title: Text(
+        //   'sign up',
+        //   style: TextStyle(color: Colors.blue),
+        // ),
         actions: <Widget>[
           IconButton(
             icon: Icon(

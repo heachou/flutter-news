@@ -1,7 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_news/common/apis/apis.dart';
 import 'package:flutter_news/common/entitys/entitys.dart';
+import 'package:flutter_news/common/router/router.gr.dart';
 import 'package:flutter_news/common/widgets/button.dart';
 import 'package:flutter_news/common/widgets/input.dart';
 import 'package:flutter_news/common/widgets/widgets.dart';
@@ -25,7 +27,7 @@ class _SignInPageState extends State<SignInPage> {
   final TextEditingController _passController = TextEditingController();
   // 跳转 注册界面
   _handleNavSignUp() {
-    Navigator.pushNamed(context, "/sign-up");
+    ExtendedNavigator.rootNavigator.pushNamed(Routes.signUpPageRoute);
   }
 
   // 执行登录操作
@@ -46,10 +48,8 @@ class _SignInPageState extends State<SignInPage> {
     UserLoginResponseEntity res =
         await UserAPI.login(params: params, context: context);
     Global.saveProfile(res);
-    Navigator.pushNamed(
-      context,
-      '/app',
-    );
+    ExtendedNavigator.rootNavigator.pushNamedAndRemoveUntil(
+        Routes.applicationPageRoute, (Route<dynamic> route) => false);
   }
 
   // logo
@@ -231,10 +231,7 @@ class _SignInPageState extends State<SignInPage> {
       margin: EdgeInsets.only(bottom: duSetHeight(20)),
       child: btnFlatButtonWidget(
         onPressed: () {
-          Navigator.pushNamed(
-            context,
-            "/sign-up",
-          );
+          ExtendedNavigator.rootNavigator.pushNamed(Routes.signUpPageRoute);
         },
         width: 294,
         gbColor: AppColors.secondaryElement,
