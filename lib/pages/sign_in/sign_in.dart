@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_news/common/apis/apis.dart';
 import 'package:flutter_news/common/entitys/entitys.dart';
 import 'package:flutter_news/common/widgets/button.dart';
@@ -246,18 +247,25 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+
     return Scaffold(
       // 避免键盘挡住输入框
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            _buildLogo(),
-            _buildInputForm(),
-            Spacer(),
-            _buildThirdPartyLogin(),
-            _buildSignupButton()
-          ],
+      body: SingleChildScrollView(
+        child: SizedBox(
+          height: height,
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                _buildLogo(),
+                _buildInputForm(),
+                Spacer(),
+                _buildThirdPartyLogin(),
+                _buildSignupButton()
+              ],
+            ),
+          ),
         ),
       ),
     );
