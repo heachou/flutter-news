@@ -14,6 +14,7 @@ import 'package:flutter_news/pages/sign_up/sign_up.dart';
 import 'package:flutter_news/pages/application/application.dart';
 import 'package:flutter_news/common/router/auth_guard.dart';
 import 'package:flutter_news/pages/details/details.dart';
+import 'package:flutter_news/common/router/router.dart';
 
 abstract class Routes {
   static const indexPageRoute = '/';
@@ -101,10 +102,11 @@ class AppRouter extends RouterBase {
         }
         final typedArgs =
             args as DetailsPageArguments ?? DetailsPageArguments();
-        return MaterialPageRoute<dynamic>(
-          builder: (context) => DetailsPage(
+        return PageRouteBuilder<dynamic>(
+          pageBuilder: (context, animation, secondaryAnimation) => DetailsPage(
               key: typedArgs.key, title: typedArgs.title, url: typedArgs.url),
           settings: settings,
+          transitionsBuilder: zoomInTransition,
         );
       default:
         return unknownRoutePage(settings.name);
