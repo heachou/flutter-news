@@ -1,12 +1,17 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_easyrefresh/easy_refresh.dart';
 import 'package:flutter_news/common/apis/news.dart';
 import 'package:flutter_news/common/entitys/entitys.dart';
 import 'package:flutter_news/common/utils/utils.dart';
+import 'package:flutter_news/common/values/values.dart';
 import 'package:flutter_news/pages/main/categories_widget.dart';
 import 'package:flutter_news/pages/main/channels_widget.dart';
 import 'package:flutter_news/pages/main/news_item_widget.dart';
 import 'package:flutter_news/pages/main/newsletter_widget.dart';
 import 'package:flutter_news/pages/main/recommend_widget.dart';
+import 'package:pk_skeleton/pk_skeleton.dart';
 
 class MainPage extends StatefulWidget {
   MainPage({Key key}) : super(key: key);
@@ -16,6 +21,7 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
+  EasyRefreshController _controller; // EasyRefresh控制器
   NewsPageListResponseEntity _newsPageList; // 新闻翻页
   NewsRecommendResponseEntity _newsRecommend; // 新闻推荐
   List<CategoryResponseEntity> _categories; // 分类
@@ -26,17 +32,67 @@ class _MainPageState extends State<MainPage> {
   @override
   void initState() {
     super.initState();
+    _controller = EasyRefreshController();
     _loadAllData();
+    _loadLatestWithDiskCache();
+  }
+
+  // 如果有磁盘缓存，延迟3秒拉取更新档案
+  _loadLatestWithDiskCache() {
+    if (CACHE_ENABLE == true) {
+      var cacheData = StorageUtil().getJSON(STORAGE_INDEX_NEWS_CACHE_KEY);
+      if (cacheData != null) {
+        Timer(Duration(seconds: 3), () {
+          _controller.callRefresh();
+        });
+      }
+    }
   }
 
   // 读取所有数据
   _loadAllData() async {
-    _categories = await NewsAPI.categories();
-    _channels = await NewsAPI.channels();
-    _newsRecommend = await NewsAPI.newsRecommend();
-    _newsPageList = await NewsAPI.newsPageList();
+    _categories = await NewsAPI.categories(
+      context: context,
+      cacheDisk: true,
+    );
+    _channels = await NewsAPI.channels(
+      context: context,
+      cacheDisk: true,
+    );
+    _newsRecommend = await NewsAPI.newsRecommend(
+      context: context,
+      cacheDisk: true,
+    );
+    _newsPageList = await NewsAPI.newsPageList(
+      context: context,
+      cacheDisk: true,
+    );
 
     _selCategoryCode = _categories.first.code;
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  // 拉取推荐、新闻
+  _loadNewsData(
+    categoryCode, {
+    bool refresh = false,
+  }) async {
+    _selCategoryCode = categoryCode;
+    _newsRecommend = await NewsAPI.newsRecommend(
+      context: context,
+      params: NewsRecommendRequestEntity(categoryCode: categoryCode),
+      refresh: refresh,
+      cacheDisk: true,
+    );
+    _newsPageList = await NewsAPI.newsPageList(
+      context: context,
+      params: NewsPageListRequestEntity(categoryCode: categoryCode),
+      refresh: refresh,
+      cacheDisk: true,
+    );
 
     if (mounted) {
       setState(() {});
@@ -103,16 +159,30 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          _buildCategories(),
-          _buildRecommend(),
-          _buildChannels(),
-          _buildNewsList(),
-          _buildEmailSubscribe(),
-        ],
-      ),
-    );
+    return _newsPageList == null
+        ? PKCardListSkeleton()
+        : EasyRefresh(
+            enableControlFinishRefresh: true,
+            controller: _controller,
+            header: DeliveryHeader(),
+            onRefresh: () async {
+              await _loadNewsData(
+                _selCategoryCode,
+                refresh: true,
+              );
+              _controller.finishRefresh();
+            },
+            child: SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  _buildCategories(),
+                  _buildRecommend(),
+                  _buildChannels(),
+                  _buildNewsList(),
+                  _buildEmailSubscribe(),
+                ],
+              ),
+            ),
+          );
   }
 }

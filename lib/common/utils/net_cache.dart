@@ -1,6 +1,7 @@
 import 'dart:collection';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_news/common/utils/utils.dart';
 import 'package:flutter_news/common/values/values.dart';
 
 class CacheObject {
@@ -26,6 +27,8 @@ class NetCache extends Interceptor {
     if (!CACHE_ENABLE) return options;
     // refresh标记是否是"下拉刷新"
     bool refresh = options.extra["refresh"] == true;
+    // 是否磁盘缓存
+    bool cacheDisk = options.extra["cacheDisk"] == true;
     // 如果是下拉刷新，先删除相关缓存
     if (refresh) {
       if (options.extra["list"] == true) {
@@ -34,6 +37,10 @@ class NetCache extends Interceptor {
       } else {
         // 如果不是列表，则只删除uri相同的缓存
         delete(options.uri.toString());
+      }
+      // 删除磁盘缓存
+      if (cacheDisk) {
+        await StorageUtil().remove(options.uri.toString());
       }
       return options;
     }
@@ -52,6 +59,17 @@ class NetCache extends Interceptor {
           cache.remove(key);
         }
       }
+
+      // 2 磁盘缓存
+      if (cacheDisk) {
+        var cacheData = StorageUtil().getJSON(key);
+        if (cacheData != null) {
+          return Response(
+            statusCode: 200,
+            data: cacheData,
+          );
+        }
+      }
     }
   }
 
@@ -68,17 +86,25 @@ class NetCache extends Interceptor {
     }
   }
 
-  _saveCache(Response object) {
+  Future<void> _saveCache(Response object) async {
     RequestOptions options = object.request;
 
     // 只缓存 get 的请求
     if (options.extra["noCache"] != true &&
         options.method.toLowerCase() == "get") {
+      // 策略：内存、磁盘都写缓存
+
+      // 缓存key
+      String key = options.extra["cacheKey"] ?? options.uri.toString();
+
+      // 磁盘缓存
+      if (options.extra["cacheDisk"] == true) {
+        await StorageUtil().setJSON(key, object.data);
+      }
       // 如果缓存数量超过最大数量限制，则先移除最早的一条记录
       if (cache.length == CACHE_MAXCOUNT) {
         cache.remove(cache[cache.keys.first]);
       }
-      String key = options.extra["cacheKey"] ?? options.uri.toString();
       cache[key] = CacheObject(object);
     }
   }
