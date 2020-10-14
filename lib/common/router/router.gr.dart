@@ -15,6 +15,7 @@ import 'package:flutter_news/pages/application/application.dart';
 import 'package:flutter_news/common/router/auth_guard.dart';
 import 'package:flutter_news/pages/details/details.dart';
 import 'package:flutter_news/common/router/router.dart';
+import 'package:flutter_news/common/entitys/news.dart';
 
 abstract class Routes {
   static const indexPageRoute = '/';
@@ -103,8 +104,8 @@ class AppRouter extends RouterBase {
         final typedArgs =
             args as DetailsPageArguments ?? DetailsPageArguments();
         return PageRouteBuilder<dynamic>(
-          pageBuilder: (context, animation, secondaryAnimation) => DetailsPage(
-              key: typedArgs.key, title: typedArgs.title, url: typedArgs.url),
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              DetailsPage(key: typedArgs.key, item: typedArgs.item),
           settings: settings,
           transitionsBuilder: zoomInTransition,
         );
@@ -151,9 +152,8 @@ class ApplicationPageArguments {
 //DetailsPage arguments holder class
 class DetailsPageArguments {
   final Key key;
-  final String title;
-  final String url;
-  DetailsPageArguments({this.key, this.title, this.url});
+  final NewsRecommendResponseEntity item;
+  DetailsPageArguments({this.key, this.item});
 }
 
 // *************************************************************************
@@ -201,10 +201,12 @@ extension AppRouterNavigationHelperMethods on ExtendedNavigatorState {
       );
 
   Future pushDetailsPageRoute(
-          {Key key, String title, String url, OnNavigationRejected onReject}) =>
+          {Key key,
+          NewsRecommendResponseEntity item,
+          OnNavigationRejected onReject}) =>
       pushNamed(
         Routes.detailsPageRoute,
-        arguments: DetailsPageArguments(key: key, title: title, url: url),
+        arguments: DetailsPageArguments(key: key, item: item),
         onReject: onReject,
       );
 }

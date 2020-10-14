@@ -16,8 +16,13 @@ Widget recommendWidget(NewsRecommendResponseEntity newsRecommend) {
       children: <Widget>[
         // 图
         InkWell(
-          onTap: () => ExtendedNavigator.rootNavigator.pushDetailsPageRoute(
-              title: newsRecommend.title, url: newsRecommend.url),
+          onTap: () async {
+            String val =
+                await ExtendedNavigator.rootNavigator.pushDetailsPageRoute(
+              item: newsRecommend,
+            );
+            print(val);
+          },
           child: imageCached(newsRecommend.thumbnail,
               width: duSetWidth(335), height: duSetHeight(299)),
         ),

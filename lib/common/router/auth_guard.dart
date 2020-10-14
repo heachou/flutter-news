@@ -7,7 +7,6 @@ class AuthGuard extends RouteGuard {
   Future<bool> canNavigate(ExtendedNavigatorState navigator, String routeName,
       Object arguments) async {
     var isAuth = await isAuthenticated();
-    print(isAuth);
     if (isAuth == false) {
       ExtendedNavigator.rootNavigator.pushNamed(Routes.signInPageRoute);
     }
