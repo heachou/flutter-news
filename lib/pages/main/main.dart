@@ -20,7 +20,8 @@ class MainPage extends StatefulWidget {
   _MainPageState createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage>
+    with AutomaticKeepAliveClientMixin {
   EasyRefreshController _controller; // EasyRefresh控制器
   NewsPageListResponseEntity _newsPageList; // 新闻翻页
   NewsRecommendResponseEntity _newsRecommend; // 新闻推荐
@@ -37,6 +38,8 @@ class _MainPageState extends State<MainPage> {
     _loadLatestWithDiskCache();
   }
 
+  @override
+  bool get wantKeepAlive => true;
   // 如果有磁盘缓存，延迟3秒拉取更新档案
   _loadLatestWithDiskCache() {
     if (CACHE_ENABLE == true) {
@@ -159,6 +162,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return _newsPageList == null
         ? PKCardListSkeleton()
         : EasyRefresh(

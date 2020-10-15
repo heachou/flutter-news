@@ -11,10 +11,12 @@ class AccountPage extends StatefulWidget {
   _AccountPageState createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _AccountPageState extends State<AccountPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
     final appState = Provider.of<AppState>(context);
+    super.build(context);
     return Column(
       children: <Widget>[
         MaterialButton(
@@ -34,4 +36,7 @@ class _AccountPageState extends State<AccountPage> {
       ],
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

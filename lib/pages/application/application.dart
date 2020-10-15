@@ -81,8 +81,11 @@ class _ApplicationPageState extends State<ApplicationPage>
   ];
 // tab栏动画
   void _handleNavBarTap(int index) {
-    _pageController.animateToPage(index,
-        duration: const Duration(milliseconds: 200), curve: Curves.ease);
+    _pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 200),
+      curve: Curves.ease,
+    );
   }
 
   // tab栏页码切换
