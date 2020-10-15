@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'flutter news',
+      title: 'IPet',
       debugShowCheckedModeBanner: false,
       builder: ExtendedNavigator<AppRouter>(
         initialRoute: Routes.indexPageRoute,
