@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.7.0 <3.0.0'
 
 dependencies:
   flutter:
@@ -55,6 +55,18 @@ dependencies:
   loading_animations: ^2.1.0
   # share
   share: ^0.6.4
+  # 设备信息
+  device_info: ^0.4.2+3
+  # 包信息
+  package_info: ^0.4.0+18
+  # 路径查询
+  path_provider: ^1.6.8
+  # permission 权限
+  permission_handler: ^5.0.0+hotfix.6
+  # 安装
+  install_plugin: ^2.0.1
+  # 对话框
+  easy_dialog: ^1.0.5
 
 dev_dependencies:
   flutter_test:
@@ -66,17 +78,16 @@ dev_dependencies:
   build_runner:
 
 flutter_icons:
-  android: "launcher_icon"
+  android: 'launcher_icon'
   ios: true
-  image_path: "assets/icons/logo-1024.png"
-
+  image_path:
+    'assets/icons/logo-1024.png'
 
     # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -85,7 +96,6 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
-
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

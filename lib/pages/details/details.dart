@@ -240,6 +240,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
 // 删除广告
+  // ignore: unused_element
   _removeWebViewAd() async {
     await (await _controller.future)?.evaluateJavascript('''
         try {
@@ -277,6 +278,7 @@ class _DetailsPageState extends State<DetailsPage> {
   }
 
   // 获取web浏览器像素密度
+  // ignore: unused_element
   _getWebViewDevicePixelRatio() async {
     await (await _controller.future)?.evaluateJavascript('''
         try {

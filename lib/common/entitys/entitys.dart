@@ -5,3 +5,4 @@ export 'news.dart';
 export 'category.dart';
 export 'channels.dart';
 export 'tags.dart';
+export 'app.dart';

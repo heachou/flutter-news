@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:device_info/device_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_news/common/entitys/entitys.dart';
 import 'package:flutter_news/common/provider/provider.dart';
 import 'package:flutter_news/common/utils/utils.dart';
 import 'package:flutter_news/common/values/values.dart';
+import 'package:package_info/package_info.dart';
 
 class Global {
   /// 用户配置
@@ -24,6 +26,21 @@ class Global {
 
   /// 是否 release
   static bool get isRelease => bool.fromEnvironment("dart.vm.product");
+
+  /// 发布渠道
+  static String channel = "xiaomi";
+
+  /// 是否 ios
+  static bool isIOS = Platform.isIOS;
+
+  /// android 设备信息
+  static AndroidDeviceInfo androidDeviceInfo;
+
+  /// ios 设备信息
+  static IosDeviceInfo iosDeviceInfo;
+
+  /// 包信息
+  static PackageInfo packageInfo;
 
   /// init
   static Future init() async {
@@ -46,14 +63,23 @@ class Global {
       isOfflineLogin = true;
     }
 
-    // http 缓存
+    // 读取设备信息
+    DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    if (Global.isIOS) {
+      Global.iosDeviceInfo = await deviceInfoPlugin.iosInfo;
+    } else {
+      Global.androidDeviceInfo = await deviceInfoPlugin.androidInfo;
+    }
+    // 包信息
+    Global.packageInfo = await PackageInfo.fromPlatform();
 
+    // http 缓存
     // android 状态栏为透明的沉浸
-    // if (Platform.isAndroid) {
-    //   SystemUiOverlayStyle systemUiOverlayStyle =
-    //       SystemUiOverlayStyle(statusBarColor: Colors.transparent);
-    //   SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
-    // }
+    if (Platform.isAndroid) {
+      SystemUiOverlayStyle systemUiOverlayStyle =
+          SystemUiOverlayStyle(statusBarColor: Colors.transparent);
+      SystemChrome.setSystemUIOverlayStyle(systemUiOverlayStyle);
+    }
   }
 
   static Future<bool> saveProfile(UserLoginResponseEntity userResponse) {
